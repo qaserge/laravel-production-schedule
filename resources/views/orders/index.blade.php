@@ -26,7 +26,7 @@
                                         <td>{{ $order->id }}</td>
                                         <td>{{ $order->customer->name }}</td>
                                         <td>{{ $order->need_by }}</td>
-                                        <td>{{ $order->approximate_time }}</td>
+                                        <td>{{ $order->production_time }}</td>
                                         <td>
                                             Order #{{ $order->id }} ({{ $order->created_at }})
                                             <ul>
@@ -40,6 +40,7 @@
                                 @endforeach
                             </tbody>
                         </table>
+                        {{ $orders->links('pagination::bootstrap-5') }}
                     </div>
                 </div>
             </div>
