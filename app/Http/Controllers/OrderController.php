@@ -26,22 +26,27 @@ class OrderController extends Controller
     {
         $request->validate([
             'customer' => 'required|string',
-            'product' => 'required|exists:products,id',
+            'products' => 'required|array',
+            'quantities' => 'required|array',
             'need_by' => 'required|date',
         ]);
 
         try {
-            $customer = Customer::firstOrCreate(['name' => $request->customer]);
-
             $order = new Order();
+            $customer = Customer::firstOrCreate(['name' => $request->customer]);
             $order->customer_id = $customer->id;
             $order->need_by = $request->need_by;
             $order->save();
 
-            $orderItem = new OrderItem();
-            $orderItem->order_id = $order->id;
-            $orderItem->product_id = $request->product;
-            $orderItem->save();
+            foreach ($request->products as $key => $product_id) {
+                if ($request->quantities[$product_id] > 0) {
+                    $orderItem = new OrderItem();
+                    $orderItem->order_id = $order->id;
+                    $orderItem->product_id = $product_id;
+                    $orderItem->quantity = $request->quantities[$product_id];
+                    $orderItem->save();
+                }
+            }
 
             return redirect()->back()->with('success', 'Order created successfully!');
         } catch (\Exception $e) {

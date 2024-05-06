@@ -1,34 +1,54 @@
 @extends('layouts.app')
 
-@section('content')    
+@section('content')
     <div class="container">
         <div class="row justify-content-center">
             <div class="col-md-8">
                 <div class="card">
-                    <div class="card-header">Create Order</div>
+                    <div class="card-header">
+                        <h1>Create Order</h1>
+                    </div>
 
                     <div class="card-body">
                         <form method="POST" action="{{ route('orders.store') }}">
                             @csrf
 
-                            <div class="form-group">
-                                <label for="customer">Customer:</label>
-                                <input type="text" class="form-control" id="customer" name="customer" required>
-                            </div>
-
-                            <div class="form-group">
-                                <label for="product">Product:</label>
-                                <select class="form-control" id="product" name="product" required>
-                                    @foreach ($products as $product)
-                                        <option value="{{ $product->id }}">{{ $product->name }}</option>
-                                    @endforeach
-                                </select>
-                            </div>
-
-                            <div class="form-group">
-                                <label for="need_by">Need-By Date:</label>
-                                <input type="date" class="form-control" id="need_by" name="need_by" required>
-                            </div>
+                            <table class="table">
+                                <tbody>
+                                    <div class="form-group">
+                                        <tr>
+                                            <td><label for="customer">Customer:</label></td>
+                                            <td><input type="text" class="form-control" id="customer" name="customer"
+                                                    required></td>
+                                        </tr>
+                                    </div>
+                                    <div class="form-group">
+                                        <tr>
+                                            <td><label for="products">Products:</label></td>
+                                            <td>
+                                                @foreach ($products as $product)
+                                                    <div>
+                                                        <input type="checkbox" id="product_{{ $product->id }}"
+                                                            name="products[]" value="{{ $product->id }}">
+                                                        <label
+                                                            for="product_{{ $product->id }}">{{ $product->name }}</label>
+                                                        <input type="number" id="quantity_{{ $product->id }}"
+                                                            name="quantities[{{ $product->id }}]" value="0"
+                                                            min="0">
+                                                    </div>
+                                                @endforeach
+                                            </td>
+                                        </tr>
+                                    </div>
+                                    <div class="form-group">
+                                        <tr>
+                                            <td><label for="need_by">Need-By Date:</label></td>
+                                            <td><input type="date" class="form-control" id="need_by" name="need_by"
+                                                    required></td>
+                                        </tr>
+                                    </div>
+                                </tbody>
+                            </table>
 
                             <button type="submit" class="btn btn-primary">Submit</button>
                         </form>
