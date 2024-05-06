@@ -11,6 +11,8 @@ class OrderItem extends Model
 
     protected $fillable = ['order_id', 'product_id'];
 
+    protected $touches = ['order']; 
+
     public function order()
     {
         return $this->belongsTo(Order::class);
